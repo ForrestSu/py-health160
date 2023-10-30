@@ -17,19 +17,19 @@ import tempfile
 configs = {
     'username': '', # 记住账号请填入这里
     'password': '', # 记住密码请填入这里
-    'city_index': '',
-    'unit_id': '',
-    'dep_id': '',
+    'city_index': '9', # 深圳
+    'unit_id': '21',  # 北大深圳医院
+    'dep_id': '', # 牙体牙髓科（补牙及根管治疗）
     'doc_id': '',
     'weeks': ['1','2','3','4','5','6','7'], # 如需更改，例： 周一 ['1']  周一三五 ['1','3','5'] 周二四 ['2','4']
     'days': ['am','pm'],
-    'unit_name': '',
+    'unit_name': '北京大学深圳医院',
     'dep_name': '',
     'doctor_name': '',
     'user_key': ''
 }
 
-print("您的useragent临时文件夹为，有需要请复制它：%s" % tempfile.gettempdir())
+
 ua = UserAgent()
 
 PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDWuY4Gff8FO3BAKetyvNgGrdZM9CMNoe45SzHMXxAPWw6E2idaEjqe5uJFjVx55JW" \
@@ -414,6 +414,8 @@ def set_hospital_configs():
         for index, hospital in enumerate(hospitals):
             print("{}{}. {}".format(" " if index < 9 else "",
                                     index + 1, hospital["unit_name"]))
+            if index>5:
+                break
         print()
         while True:
             hospital_index = input("请输入医院序号: ")
@@ -494,9 +496,9 @@ def set_doctor_configs():
         print("当前选择医生为：%s（%s）" % (configs["doctor_name"], configs["doc_id"]))
 
 def set_logger():
-    LOG_FILENAME = 'atest.log'
+    LOG_FILENAME = 'test.log'
     logger = logging.getLogger()
-    logger.setLevel(40)
+    logger.setLevel("INFO")
     # formatter = logging.Formatter('%(asctime)s - %(process)d-%(threadName)s - '
     #                               '%(pathname)s[line:%(lineno)d] - %(levelname)s: %(message)s')
     console_handler = logging.StreamHandler()
@@ -557,8 +559,8 @@ def run():
     weeks = configs["weeks"]
     days = configs["days"]
     user_key = configs["user_key"]
-    # 刷票休眠时间，频率过高会导致刷票接口拒绝请求
-    sleep_time = 15
+    # 刷票休眠时间(秒)，频率过高会导致刷票接口拒绝请求
+    sleep_time = 10
 
     logging.error("刷票开始")
     logging.error(
@@ -571,8 +573,8 @@ def run():
             logging.error(e)
             break
         if len(tickets) > 0:
-            logging.error(tickets)
-            logging.error("刷到票了，开抢了...")
+            logging.info(tickets)
+            logging.info("刷到票了，开抢了...")
             try:
                 if get_ticket(tickets[ramdomMath(len(tickets) - 1)], unit_id, dep_id):
                     break
@@ -583,9 +585,9 @@ def run():
                 continue
             break
         else:
-            logging.error("努力刷票中...")
+            logging.info("刷新中...")
         time.sleep(sleep_time)
-    logging.error("刷票结束")
+    logging.info("刷票结束")
     print("当前配置为：\n\t%s" % configs)
 
 def ramdomMath(max):
