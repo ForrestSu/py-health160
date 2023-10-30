@@ -583,6 +583,7 @@ def run():
             except Exception as e:
                 logging.error("发生错误：=获取票的参数失败了，建议多试几次=：{}".format(e))
                 continue
+            # never exec here
             break
         else:
             logging.info("刷新中...")

@@ -14,6 +14,19 @@
 
 > docker run --privileged -it  --rm --name health160 -v ~/tools/health160:/usr/src/app sunquana/python3 sh
 
+``` 
+   'username': '',
+   'password': '',
+   'city_index': '9',
+   'unit_id': '21',
+   'dep_id': '4380',
+   'doc_id': '200011554',
+   'weeks': ['1', '2', '3', '4', '5', '6', '7'],
+   'days': ['am', 'pm'],
+   'unit_name': '北京大学深圳医院',
+   'dep_name': '牙体牙髓科（补牙及根管治疗）',
+   'doctor_name': '姚瑶--口腔内科(牙痛、补牙等)'
+```
 
 ## 💡 特别声明:
 
@@ -36,6 +49,7 @@
 - 自动挂号
 
 - 自动抢号
+
 
 
 
