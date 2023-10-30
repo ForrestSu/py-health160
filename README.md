@@ -10,6 +10,11 @@
 
 > 2021-10-28：运行main.py 出现fake-useragent报错的问题，已解决，详情参考下方记录
 
+##  Docker 使用说明
+
+> docker run --privileged -it  --rm --name health160 -v ~/tools/health160:/usr/src/app sunquana/python3 sh
+
+
 ## 💡 特别声明:
 
 * 本仓库发布的`health160`项目中涉及的任何脚本，仅用于测试和学习研究，禁止用于商业用途，不能保证其合法性，准确性，完整性和有效性，请根据情况自行判断。
