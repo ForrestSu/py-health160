@@ -19,7 +19,7 @@ configs = {
     'password': '', # 记住密码请填入这里
     'city_index': '9', # 深圳
     'unit_id': '21',  # 北大深圳医院
-    'dep_id': '', # 牙体牙髓科（补牙及根管治疗）
+    'dep_id': '4380', # 牙体牙髓科（补牙及根管治疗）
     'doc_id': '',
     'weeks': ['1','2','3','4','5','6','7'], # 如需更改，例： 周一 ['1']  周一三五 ['1','3','5'] 周二四 ['2','4']
     'days': ['am','pm'],
@@ -223,34 +223,6 @@ def tokens() -> str:
     r.encoding = r.apparent_encoding
     soup = BeautifulSoup(r.text, "html.parser")
     return soup.find("input", id="tokens").attrs["value"]
-
-def brush_ticket(unit_id, dep_id, weeks, days) -> list:
-    now_date = datetime.date.today().strftime("%Y-%m-%d")
-    url = "https://www.91160.com/dep/getschmast/uid-{}/depid-{}/date-{}/p-0.html".format(
-        unit_id, dep_id, now_date)
-    r = session.get(url, headers=get_headers())
-    json_obj = r.json()
-    if "week" not in json_obj:
-        raise RuntimeError("刷票异常: {}".format(json_obj))
-    week_list: list = json_obj["week"]
-    week_arr = []
-    for week in weeks:
-        week_arr.append(str(week_list.index(week)))
-    doc_ids = json_obj["doc_ids"].split(",")
-    result = []
-    for doc in doc_ids:
-        _doc = json_obj["sch"][doc]
-        for day in days:
-            if day in _doc:
-                sch = _doc[day]
-                if isinstance(sch, list) and len(sch) > 0:
-                    for item in sch:
-                        result.append(item)
-                else:
-                    for index in week_arr:
-                        if index in sch:
-                            result.append(sch[index])
-    return [element for element in result if element["y_state"] == "1"]
 
 
 def brush_ticket_new(user_key, unit_id, doc_id, dep_id, weeks, days) -> list:
@@ -481,7 +453,7 @@ def set_doctor_configs():
         for doctor in doctors:
             doc_id_arr.append(doctor["doctor_id"])
             doc_name[doctor["doctor_id"]] = doctor["doctor_name"]
-            print("{}. {}".format(doctor["doctor_id"], doctor["doctor_name"]))
+            print("{} \t{}\t预约量:{}\t{}".format(doctor["doctor_id"], doctor["zc_name"],  doctor["total_yuyue_num"], doctor["doctor_name"]))
         print()
         while True:
             doctor_index = input("请输入医生编号: ")
